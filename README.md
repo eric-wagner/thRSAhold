@@ -1,6 +1,6 @@
 # Threshold RSA Encryption Library
 
-ThRSAhold is a compact Python library that implements a hybrid RSA threshold encryption scheme for arbitrary plaintext length.
+ThRSAhold is a compact Python library that implements a hybrid RSA threshold encryption scheme for arbitrary plaintext length. Encryption can performed with common fast cryptographic libraries (see the [README](./openssl/README.md) in the ```openssl``` directory for a compatible C implementation based on openssl).
 
 Threshold encryption is an asymmetric encryption scheme where a *public key* is used to encrypt a plaintext message. However, there exist no single *private key* to decrypt an encrypted message. Instead, the decryption requires the collaboration at least *k* of private key share holders, where *k* and the total number of key share holders *l* is defined during key generation.
 
@@ -76,8 +76,10 @@ To generate the *public encryption key* and the *private decryption key shares*,
 - Returns: a PublicKey object
 
 > to_pem_file(self, path)
-- path - path of the file where the ```PublicKey``` object is stored 
-- Returns: the public encryption key in the .pem format. It can be used to use other RSA encryption libraries (e.g., openssl)
+- path - path of the file where the ```PublicKey``` object should be stored in .pem format 
+
+> to_der_file(self, path)
+- path - path of the file where the ```PublicKey``` object  object should be stored in .der format 
     
 > verify_zkp(self, share, ciphertext)
 - share - a ```DecryptionShare``` object
