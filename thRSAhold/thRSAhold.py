@@ -9,6 +9,8 @@ from Crypto.Cipher import AES
 from Crypto.Util import number
 from Crypto.PublicKey import RSA
 
+import binascii
+
 def egcd(a, b):
     
     t0, t1, s0, s1 = 0, 1, 1, 0
@@ -30,7 +32,7 @@ class PublicKey:
         self.l = l
         self.k = k
         
-        self.AES_KEYSIZE = 32 # bytes
+        self.AES_KEYSIZE = 16 # bytes
         self.rsa_ct_len = self.n.bit_length() // 8
 
     @classmethod
@@ -41,7 +43,14 @@ class PublicKey:
     
     def to_pem_file(self, path):
         publicKey = RSA.construct((self.n, self.e))
-        publicKeyPem = publicKey.exportKey() # export in X.509/SPKI format
+        publicKeyPem = publicKey.exportKey(format='PEM')
+
+        with open(path, "wb") as f:
+            f.write(publicKeyPem)
+            
+    def to_der_file(self, path):
+        publicKey = RSA.construct((self.n, self.e))
+        publicKeyPem = publicKey.exportKey(format='DER')
 
         with open(path, "wb") as f:
             f.write(publicKeyPem)
@@ -63,11 +72,11 @@ class PublicKey:
     def encrypt(self, plaintext):
                 
         if len(plaintext) < self.rsa_ct_len:
-            padding_len = max(self.rsa_ct_len - len(plaintext), 3)
+            padding_len = max(self.rsa_ct_len - len(plaintext), 11)
         else:
-            padding_len = 3
+            padding_len = 11
         
-        padding = b"\x00\x02" +  b"\xff" * (padding_len - 3) + b"\x00"
+        padding = b"\x00\x01" +  b"\xff" * (padding_len - 3) + b"\x00"
                 
         assert(len(plaintext) + len(padding) >= self.rsa_ct_len)
         
@@ -181,20 +190,21 @@ class PublicKey:
 
         #remove padding        
         index = pt[1:].find(b"\x00") # search second 0x00 that delimits end of padding
-        pt = pt[2+index:]        
+        pt = pt[2+index:]    
         
-        if ( len(ciphertext) <= self.rsa_ct_len ): # we needed more than 3 bytes of padding, so the plaintext fit into the asymmetric encryption part
+        if ( len(ciphertext) <= self.rsa_ct_len ): # the plaintext fit into the asymmetric encryption part
             return pt
         
         # decrypt and verify AES encrypted part
             
         aes_key = pt[:self.AES_KEYSIZE]
-        aes = AES.new(aes_key, AES.MODE_GCM, nonce=b"\0" * 16)
+        aes = AES.new(aes_key, AES.MODE_GCM, nonce=b"\0" * 12)
         added_ct = ciphertext[self.rsa_ct_len:-aes._mac_len]
         tag = ciphertext[-aes._mac_len:]
+                
         added_pt = aes.decrypt_and_verify( added_ct, tag )
-        
-        ret = bytes(list(pt[32:]) + list(added_pt))
+
+        ret = bytes(list(pt[self.AES_KEYSIZE:]) + list(added_pt))
                  
         return ret
 
