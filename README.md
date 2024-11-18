@@ -58,79 +58,79 @@ To generate the *public encryption key* and the *private decryption key shares*,
 ### Class: PublicKey
 
 > encrypt(plaintext)
-- plaintext -  the plaintext to be encrypted
-- Returns: the encrypted plaintext (ciphertext)
+> - plaintext -  the plaintext bytes to be encrypted
+> - Returns: the encrypted plaintext (ciphertext)
 
 > serialize(self)
-- Returns: a serialized string of the ```PublicKey``` object
+> - Returns: a serialized string of the ```PublicKey``` object
 
 > deserialize(cls, key)
-- key - a serialized ```PublicKey``` object
-- Returns: a ```PublicKey``` object
+> - key - a serialized ```PublicKey``` object
+> - Returns: a ```PublicKey``` object
 
 > to_file(self, path)
-- path - path of the file where the ```PublicKey``` object should be stored 
+> - path - path of the file where the ```PublicKey``` object should be stored 
 
 > from_file(cls, path)
-- path - path of the file where the ```PublicKey``` object is stored 
-- Returns: a PublicKey object
+> - path - path of the file where the ```PublicKey``` object is stored 
+> - Returns: a PublicKey object
 
 > to_pem_file(self, path)
-- path - path of the file where the ```PublicKey``` object should be stored in .pem format 
+> - path - path of the file where the ```PublicKey``` object should be stored in .pem format 
 
 > to_der_file(self, path)
-- path - path of the file where the ```PublicKey``` object  object should be stored in .der format 
+> - path - path of the file where the ```PublicKey``` object  object should be stored in .der format 
     
 > verify_zkp(self, share, ciphertext)
-- share - a ```DecryptionShare``` object
-- ciphertext - the ciphertext
-- Returns: True if the decryption share is authentic, False otherwise
+> - share - a ```DecryptionShare``` object
+> - ciphertext - the ciphertext
+> - Returns: True if the decryption share is authentic, False otherwise
 
 > combine_shares(self, shares, ciphertext)
-- shares - a least of at least *k* authentic ```DecryptionShare``` objects, each generated from a different ```PrivateKey```
-- ciphertext - the ciphertext
-- Returns: the plaintext
+> - shares - a least of at least *k* authentic ```DecryptionShare``` objects, each generated from a different ```PrivateKey```
+> - ciphertext - the ciphertext
+> - Returns: the plaintext
 
 
 ### Class: PrivateKey
 
 > compute_share(self, ciphertext)
-- ciphertext - the ciphertext
-- Returns: a ```DecryptionShare``` object
+> - ciphertext - the ciphertext
+> - Returns: a ```DecryptionShare``` object
 
 > serialize(self)
-- Returns: a serialized string of the ```PrivateKey``` object
+> - Returns: a serialized string of the ```PrivateKey``` object
 
 > deserialize(cls, key)
-- key - a serialized ```PrivateKey``` object
-- Returns: a ```PrivateKey``` object
+> - key - a serialized ```PrivateKey``` object
+> - Returns: a ```PrivateKey``` object
 
 > to_file(self, path)
-- path - path of the file where the ```PrivateKey``` object should be stored 
+> - path - path of the file where the ```PrivateKey``` object should be stored 
 
 > from_file(cls, path)
-- path - path of the file where the ```PrivateKey``` object is stored 
-- Returns: a ```PrivateKey``` object
+> - path - path of the file where the ```PrivateKey``` object is stored 
+> - Returns: a ```PrivateKey``` object
 
 ### Class: DecryptionShare
 
 > serialize(self)
-- Returns: a serialized string of the ```DecryptionShare``` object
+> - Returns: a serialized string of the ```DecryptionShare``` object
 
 > deserialize(cls, key)
-- key - a serialized ```DecryptionShare``` object
-- Returns: a ```DecryptionShare``` object
+> - key - a serialized ```DecryptionShare``` object
+> - Returns: a ```DecryptionShare``` object
 
 > to_file(self, path)
-- path - path of the file where the ```DecryptionShare``` object should be stored 
+> - path - path of the file where the ```DecryptionShare``` object should be stored 
 
 > from_file(cls, path)
-- path - path of the file where the ```DecryptionShare``` object is stored 
-- Returns: a ```DecryptionShare``` object
+> - path - path of the file where the ```DecryptionShare``` object is stored 
+> - Returns: a ```DecryptionShare``` object
 
 ## Contact
 
-Anonymized
+Eric Wagner - eric.wagner@fkie.fraunhofer.de
 
 ## References
 

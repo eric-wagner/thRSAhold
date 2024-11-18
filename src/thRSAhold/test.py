@@ -4,31 +4,39 @@ text = b"Miusov, as a man man of breeding and deilcacy, could not but feel some 
 
 tested_thresholds_and_server_combinations = [ [5,10], [3,5], [17,20], [1,2], [2,3] ]
 
-for input_len in range(240,len(text)):
-    for tested_thresholds_and_server_combination in tested_thresholds_and_server_combinations:
-        k = tested_thresholds_and_server_combination[0] # threshold of required shares
-        l = tested_thresholds_and_server_combination[1] # amount of servers
+def run_test():
 
-        pubkey, privkeys = generate_key_shares(k, l)
+    for input_len in range(240,len(text)):
+        for tested_thresholds_and_server_combination in tested_thresholds_and_server_combinations:
+            k = tested_thresholds_and_server_combination[0] # threshold of required shares
+            l = tested_thresholds_and_server_combination[1] # amount of servers
 
-        input = text[:input_len]
+            pubkey, privkeys = generate_key_shares(k, l)
 
-        ciphertext = pubkey.encrypt(input)
+            input = text[:input_len]
 
-        shares = []
-        for i in range(k):
-            s = privkeys[i].compute_share( ciphertext )
-            ser = s.serialize()
-            s = DecryptionShare.deserialize(ser)
-            shares.append(s)
+            ciphertext = pubkey.encrypt(input)
 
-        for i in range(k):
-            pubkey.verify_zkp(shares[i], ciphertext)
+            shares = []
+            for i in range(k):
+                s = privkeys[i].compute_share( ciphertext )
+                ser = s.serialize()
+                s = DecryptionShare.deserialize(ser)
+                shares.append(s)
 
-        plaintext = pubkey.combine_shares(shares, ciphertext)
-        #assert( pow(sig, e, n) == msg )
-        print( plaintext )
-        verify = plaintext == input
-        print(verify)
-        if not verify:
-            exit(0)
+            for i in range(k):
+                pubkey.verify_zkp(shares[i], ciphertext)
+
+            plaintext = pubkey.combine_shares(shares, ciphertext)
+            
+            print( plaintext )
+            verify = plaintext == input
+            print(f"Plaintext matches original text: {verify}")
+            if not verify:
+                print(f"Test failed!!!")
+                print(f"Number of servers: {l}")
+                print(f"Decryption threshold: {k}")
+                print(f"Plaintext length: {input_len}")
+                return
+                
+    print(f"All tests passed successfully!")
