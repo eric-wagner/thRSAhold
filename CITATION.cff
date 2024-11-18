@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this library, consider citing our paper that motivated its development"
+authors:
+- family-names: "Wagner"
+  given-names: "Eric"
+  orcid: "https://orcid.org/0000-0003-3211-1015"
+- family-names: "Matzutt"
+  given-names: "Roman"
+  orcid: "https://orcid.org/0000-0002-4263-5317"
+- family-names: "Henze"
+  given-names: "Martin"
+  orcid: "https://orcid.org/0000-0001-8717-2523"
+title: "Seldom: An Anonymity Network with Selective Deanonymization"
+# doi: 10.5281/zenodo.1234
