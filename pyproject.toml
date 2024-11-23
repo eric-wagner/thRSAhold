@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "thRSAhold"
-version = "0.1.3"
+version = "0.1.4"
 description = "A Hybrid RSA Threshold Encryption Library"
 authors = [
     {name = "Eric Wagner", email = "eric.wagner@fkie.fraunhofer.de"},

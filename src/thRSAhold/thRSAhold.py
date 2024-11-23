@@ -96,7 +96,7 @@ class PublicKey:
         ct = pow( int.from_bytes(pt, 'big'), self.e, self.n )
         ct = ct.to_bytes(self.rsa_ct_len, 'big')
 
-        aes = AES.new(aes_key, AES.MODE_GCM, nonce=b"\0" * 16)
+        aes = AES.new(aes_key, AES.MODE_GCM, nonce=b"\0" * 12)
         added_ct, tag = aes.encrypt_and_digest(plaintext[self.rsa_ct_len-self.AES_KEYSIZE-padding_len:])
         final_ct = bytes(list(ct) + list(added_ct) + list(tag))
                         

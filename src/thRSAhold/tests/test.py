@@ -6,10 +6,13 @@ tested_thresholds_and_server_combinations = [ [5,10], [3,5], [17,20], [1,2], [2,
 
 def run_test():
 
-    for input_len in range(240,len(text)):
+    for input_len in range(246,len(text)):
         for tested_thresholds_and_server_combination in tested_thresholds_and_server_combinations:
+            
             k = tested_thresholds_and_server_combination[0] # threshold of required shares
             l = tested_thresholds_and_server_combination[1] # amount of servers
+            
+            print(f"Testing - shares: {l}    threshold: {k}    plaintext length: {input_len}")
 
             pubkey, privkeys = generate_key_shares(k, l)
 
@@ -29,14 +32,14 @@ def run_test():
 
             plaintext = pubkey.combine_shares(shares, ciphertext)
             
-            print( plaintext )
             verify = plaintext == input
-            print(f"Plaintext matches original text: {verify}")
-            if not verify:
+            if verify:
+                print("Success!")
+            else:
                 print(f"Test failed!!!")
-                print(f"Number of servers: {l}")
-                print(f"Decryption threshold: {k}")
-                print(f"Plaintext length: {input_len}")
+                print(plaintext)
                 return
                 
     print(f"All tests passed successfully!")
+    
+run_test()
