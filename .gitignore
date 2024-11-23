@@ -1,11 +1,7 @@
-# Byte-compiled / optimized / DLL files
+.DS_Store
 __pycache__/
-
-# Distribution / packaging
 dist/
 *.egg-info/
-
-# Environments
 .env
 .venv
 env/
@@ -13,8 +9,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
 *.key
 *.pem
-
 *.o

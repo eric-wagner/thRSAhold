@@ -302,15 +302,15 @@ class DecryptionShare:
 
 
 # k is threshold and l is amount of servers
-def generate_key_shares( k, l, key_security=2048, e=65537 ):
+def generate_key_shares( k, l, key_size=2048, e=65537 ):
 
     random.seed()
 
-    prime_size = int(key_security/2)
+    prime_size = int(key_size/2)
     
     # the paper originally calls for p and q to be safe primes, however with todays typical key sizes this is no longer considered necessary for RSA to be secure
     n = None
-    while n is None or n.bit_length() < key_security:
+    while n is None or n.bit_length() < key_size:
         p = number.getPrime(prime_size)
         q = number.getPrime(prime_size)
                 

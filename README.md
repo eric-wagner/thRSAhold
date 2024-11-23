@@ -1,22 +1,27 @@
 # Threshold RSA Encryption Library
 
-ThRSAhold is a compact Python library that implements a hybrid RSA threshold encryption scheme for arbitrary plaintext length. Encryption can performed with common fast cryptographic libraries (see the [README](./openssl/README.md) in the ```openssl``` directory for a compatible C implementation based on openssl).
+ThRSAhold is a compact Python library that implements a hybrid RSA threshold encryption scheme for arbitrary plaintext length. 
 
-Threshold encryption is an asymmetric encryption scheme where a *public key* is used to encrypt a plaintext message. However, there exist no single *private key* to decrypt an encrypted message. Instead, the decryption requires the collaboration at least *k* of private key share holders, where *k* and the total number of key share holders *l* is defined during key generation.
+Threshold encryption is an asymmetric encryption scheme where a *public key* is used to encrypt a plaintext message. However, there exist no single *private key* to decrypt a ciphertext. Instead, the decryption requires the collaboration of at least *k* of private key share holders, where *k* and the total number of key share holders *l* is defined during key generation.
 
-If the plaintext is longer than the RSA key size (2048 bit by default), ThRSAhold uses an hybrid encryption scheme, where an AES key is generated and prepended to the plaintext. This AES key is used to encrypt the excess plaintext in GCM mode. All plaintexts are padded with PKCS#1 v1.5.
+If the plaintext is too long for the RSA key size (2048 bit by default), thRSAhold uses an hybrid encryption scheme, where an AES key is generated and prepended to the plaintext. This AES key is used to encrypt the excess plaintext in GCM mode. All plaintexts are padded with PKCS#1 v1.5.
 
 The implementation of the key generation, threshold RSA encryption and decryption, follows the description of threshold signatures in Victor Shoup's paper titled "Practical Threshold Signatures" [1].
+
+One advantage of thRSAhold is that encryption can be performed by any standard RSA and AES implementation, which enable fast encryption through e.g., openssl. See the [README](https://github.com/eric-wagner/thRSAhold/blob/main/src/openssl/README.md) in the ```openssl``` directory on [GitHub](https://github.com/eric-wagner/thRSAhold) for a thRSAhold-compatible openssl implementation of the encryption procedure in C.
 
 **Warning:** This implementation is not side-channel resilient or memory-safe and has not been audited. It should thus not be used for commercial applications! 
 
 ## Getting Started
 
-ThRSAhold only dependency is pycryptodome which can be installed with pip:
+The easiest way to getting started is to just download thRSAhold via pip:
 ```
-pip install pycryptodome
+pip install thRSAhold
 ```
-This library was tested with pycryptodome version 3.20.0.
+
+Alternatively, you can also download the source code of thRSAhold on [GitHub](https://github.com/eric-wagner/thRSAhold). In that case make sure that `pycryptodome` is installed:
+
+This library was tested with `pycryptodome` version 3.20.0.
 
 ## Example
 
@@ -28,7 +33,7 @@ import thRSAhold
 plaintext = b"A short test message."
 
 k = 5 # threshold of required shares
-l = 10 # amount of servers
+l = 10 # amount of shares
 
 pubkey, privkeys = thRSAhold.generate_key_shares(k, l)
 
@@ -53,7 +58,9 @@ In the following, the functionalities of the different thRSAhold components are 
 
 ### Key generation
 
-To generate the *public encryption key* and the *private decryption key shares*, thRSAhold offers the the ```generate_key_shares(k,l)``` function. The parameter *k* denotes how many *decryption shares* are required for decryption, and the parameter *l* denotes how many *private decryption key* shares exist. The function returns one ```PublicKey``` object and *l* ```PrivateKey``` objects.
+To generate the *public encryption key* and the *private decryption key shares*, thRSAhold offers the ```generate_key_shares(k,l)``` function. The parameter *k* denotes how many *decryption shares* are required for decryption, and the parameter *l* denotes how many *private decryption key* shares exist. The function returns one ```PublicKey``` object and a list of *l* ```PrivateKey``` objects.
+
+At this time, thRSAhold does not support distributed key generation.
 
 ### Class: PublicKey
 
